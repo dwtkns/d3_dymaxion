@@ -12,15 +12,15 @@
   stroke-width: 1.5px;
 }
 
-.graticule {
+/*.graticule {
   fill: none;
-  stroke: #fff;
+  stroke: #000;
   stroke-width: .5px;
 }
 
 .graticule:nth-child(2n) {
   stroke-dasharray: 2,2;
-}
+}*/
 
 .land {
   fill: #d7c7ad;
@@ -36,13 +36,16 @@
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="https://raw.github.com/d3/d3-plugins/master/geo/projection/projection.js"></script>
+<script src="/protovis_dymaxion.js"></script>
+<script src="/d3_dymaxion.js"></script>
+
 <script>
 
 var width = 960,
     height = 500;
 
-var projection = d3.geo.hammer()
-    .translate([width / 2 - .5, height / 2 - .5]);
+var projection = d3.geo.dymaxion()
+    .translate([width/3, height/6])
 
 var path = d3.geo.path()
     .projection(projection);
@@ -53,30 +56,30 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-svg.append("path")
-    .datum(graticule.outline)
-    .attr("class", "background")
-    .attr("d", path);
+// svg.append("path")
+//     .datum(graticule.outline)
+//     .attr("class", "background")
+//     .attr("d", path);
 
-svg.selectAll(".graticule")
-    .data(graticule.lines)
-  .enter().append("path")
-    .attr("class", "graticule")
-    .attr("d", path);
+// svg.selectAll(".graticule")
+//     .data(graticule.lines)
+//   .enter().append("path")
+//     .attr("class", "graticule")
+//     .attr("d", path);
 
-svg.append("path")
-    .datum(graticule.outline)
-    .attr("class", "foreground")
-    .attr("d", path);
+// svg.append("path")
+//     .datum(graticule.outline)
+//     .attr("class", "foreground")
+//     .attr("d", path);
 
-d3.json("/d/3682676/readme-boundaries.json", function(error, collection) {
+d3.json("boundaries.json", function(error, collection) {
   svg.insert("path", ".graticule")
       .datum(collection)
       .attr("class", "boundary")
       .attr("d", path);
 });
 
-d3.json("/d/3682676/readme-land.json", function(error, collection) {
+d3.json("/land.json", function(error, collection) {
   svg.insert("path", ".graticule,.boundary")
       .datum(collection)
       .attr("class", "land")
